@@ -4,7 +4,6 @@ SOFIA Real-Time Reinforcement Learning System
 Autonomous self-improvement through interaction feedback and continuous learning
 """
 
-import numpy as np
 import json
 import os
 from typing import Dict, List, Tuple, Optional, Any
@@ -13,6 +12,10 @@ import threading
 import time
 from collections import defaultdict
 import random
+import math
+
+# Import emotional intelligence components
+from sofia_emotional_intelligence import EmotionalAnalyzer, EmotionalMemory
 
 class ReinforcementLearner:
     """Real-time reinforcement learning system for SOFIA"""
@@ -347,8 +350,8 @@ class ReinforcementLearner:
                 self.exploration_rate *= 1.1  # Explore more when doing poorly
 
             # Keep parameters in reasonable bounds
-            self.learning_rate = np.clip(self.learning_rate, 0.01, 0.5)
-            self.exploration_rate = np.clip(self.exploration_rate, 0.05, 0.3)
+            self.learning_rate = max(0.01, min(0.5, self.learning_rate))
+            self.exploration_rate = max(0.05, min(0.3, self.exploration_rate))
 
         # Clean up old data
         self._cleanup_old_data()
@@ -356,7 +359,7 @@ class ReinforcementLearner:
     def _analyze_performance(self):
         """Analyze overall system performance"""
         if len(self.performance_metrics['rewards']) >= 10:
-            recent_performance = np.mean(self.performance_metrics['rewards'][-10:])
+            recent_performance = sum(self.performance_metrics['rewards'][-10:]) / len(self.performance_metrics['rewards'][-10:])
 
             performance_record = {
                 'timestamp': datetime.now().isoformat(),
@@ -391,7 +394,7 @@ class ReinforcementLearner:
         return {
             'total_states_learned': len(self.learning_data['q_table']),
             'total_interactions': len(self.performance_metrics['rewards']),
-            'average_reward': np.mean(self.performance_metrics['rewards']) if self.performance_metrics['rewards'] else 0,
+            'average_reward': sum(self.performance_metrics['rewards']) / len(self.performance_metrics['rewards']) if self.performance_metrics['rewards'] else 0,
             'learning_rate': self.learning_rate,
             'exploration_rate': self.exploration_rate,
             'improvement_actions': len(self.learning_data['adaptation_rules']),
