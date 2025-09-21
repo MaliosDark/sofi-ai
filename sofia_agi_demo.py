@@ -11,6 +11,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any, Tuple
 import os
 import sys
+import random
 
 # Import SOFIA components
 from sofia_tools_advanced import AdvancedToolAugmentedSOFIA
@@ -20,6 +21,8 @@ from conversational_sofia import ConversationalSOFIA
 from sofia_multimodal import MultiModalSOFIA
 from sofia_self_improving import SelfImprovingSOFIA
 from sofia_meta_cognition import MetaCognitiveSOFIA
+from sofia_emotional_intelligence import EmotionalAnalyzer, EmotionalMemory
+from sofia_reinforcement_learning import SelfImprovingSOFIA as SelfImprovingRL
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -41,6 +44,11 @@ class SOFIAAssistant:
         self.multimodal = None
         self.self_improver = None
         self.meta_cognitive = None
+
+        # Emotional Intelligence & Learning
+        self.emotional_analyzer = None
+        self.emotional_memory = None
+        self.reinforcement_learner = None
 
         # Federated learning coordinator
         self.federated_coordinator = None
@@ -90,6 +98,15 @@ class SOFIAAssistant:
             self.meta_cognitive = MetaCognitiveSOFIA()
             logger.info("✓ Meta-cognitive system initialized")
 
+            # Initialize emotional intelligence
+            self.emotional_analyzer = EmotionalAnalyzer()
+            self.emotional_memory = EmotionalMemory()
+            logger.info("✓ Emotional intelligence initialized")
+
+            # Initialize reinforcement learning system
+            self.reinforcement_learner = SelfImprovingRL()
+            logger.info("✓ Reinforcement learning system initialized")
+
             # Initialize federated learning if enabled
             if self.config['enable_federated_learning']:
                 self.federated_coordinator = FederatedLearningCoordinator(num_clients=3, rounds=2)
@@ -131,54 +148,75 @@ class SOFIAAssistant:
         query_context = context or {}
 
         try:
-            # 1. Meta-cognitive assessment (simplified)
+            # 1. Emotional Intelligence Analysis
+            emotion_analysis = self.emotional_analyzer.analyze_emotion(user_query)
+            user_id = query_context.get('user_id', 'anonymous')
+
+            # Get emotional context and relationship insights
+            emotional_context = self.emotional_memory.get_emotional_context(user_id)
+            relationship_insights = self.emotional_memory.get_relationship_insights(user_id)
+
+            # 2. Meta-cognitive assessment
             if self.config['enable_meta_cognition']:
-                # Simple complexity assessment based on query length
                 query_length = len(user_query)
-                complexity = min(10, max(1, query_length // 10))  # 1-10 scale
+                complexity = min(10, max(1, query_length // 10))
+                # Adjust complexity based on emotional intensity
+                emotional_complexity = emotion_analysis['intensity'] * 2
+                complexity = min(10, complexity + emotional_complexity)
                 meta_assessment = {'complexity': complexity}
             else:
                 meta_assessment = {'complexity': 5}
 
-            # 2. Conversational context (simplified)
-            conversation_context = {'relevant_memories': []}  # Mock
-            enhanced_query = user_query  # Simplified
+            # 3. Conversational context with emotional memory
+            conversation_context = self.conversational.get_relevant_context(user_query) if self.conversational else {'relevant_memories': []}
+            enhanced_query = self._enhance_query_with_emotion(user_query, emotion_analysis)
 
-            # 3. Reasoning about the query
+            # 4. Reasoning about the query with emotional context
             reasoning_result = self.reasoner.reason_about_task(
                 enhanced_query,
-                complexity=meta_assessment.get('complexity', 5) if self.config['enable_meta_cognition'] else 5
+                complexity=meta_assessment.get('complexity', 5),
+                emotional_context=emotion_analysis
             )
 
-            # 4. Tool integration
-            tool_results = await self._execute_relevant_tools(user_query, reasoning_result)
+            # 5. Tool integration with emotional awareness
+            tool_results = await self._execute_relevant_tools(user_query, reasoning_result, emotion_analysis)
 
-            # 5. Multimodal processing
+            # 6. Multimodal processing
             multimodal_results = await self._process_multimodal_content(query_context)
 
-            # 6. Self-improvement learning (simplified)
+            # 7. Self-improvement learning with reinforcement
+            learning_insights = "Learning from interaction"
             if self.config['enable_self_improvement']:
-                learning_insights = "Learning from interaction"  # Mock
+                learning_insights = self.self_improver.analyze_and_improve(user_query, response)
 
-            # 7. Generate comprehensive response
-            response = await self._generate_response(
-                user_query,
+            # 8. Generate emotionally intelligent response using reinforcement learning
+            response_data = self.reinforcement_learner.process_user_input(user_query, user_id)
+            response = response_data['response']
+
+            # Enhance response with SOFIA's full capabilities
+            enhanced_response = await self._enhance_response_with_capabilities(
+                response,
                 reasoning_result,
                 tool_results,
                 multimodal_results,
-                conversation_context
+                conversation_context,
+                emotion_analysis,
+                relationship_insights
             )
 
-            # 8. Update conversation history
-            self._update_conversation_history(user_query, response)
+            # 9. Update conversation history with emotional context
+            self._update_conversation_history(user_query, enhanced_response, emotion_analysis)
 
-            # 9. Performance tracking
+            # 10. Update emotional memory
+            self.emotional_memory.update_emotional_profile(user_id, emotion_analysis)
+
+            # 11. Performance tracking with emotional metrics
             processing_time = (datetime.now() - start_time).total_seconds()
-            self._track_performance(user_query, processing_time, response)
+            self._track_performance(user_query, processing_time, enhanced_response, emotion_analysis)
 
-            # 10. Federated learning update (if applicable)
+            # 12. Federated learning update
             if self.config['enable_federated_learning'] and self.federated_coordinator:
-                await self._update_federated_learning(user_query, response)
+                await self._update_federated_learning(user_query, enhanced_response)
 
             return {
                 'success': True,
@@ -257,10 +295,104 @@ class SOFIAAssistant:
 
         return response
 
-    def _update_conversation_history(self, query: str, response: str):
-        """Update conversation history"""
-        self.conversation_history.append({
+    def _update_conversation_history(self, query: str, response: str, emotion_analysis: Dict = None):
+        """Update conversation history with emotional context"""
+        history_entry = {
             'timestamp': datetime.now().isoformat(),
+            'query': query,
+            'response': response,
+            'emotion': emotion_analysis.get('primary_emotion', 'neutral') if emotion_analysis else 'neutral',
+            'intensity': emotion_analysis.get('intensity', 0.0) if emotion_analysis else 0.0
+        }
+
+        self.conversation_history.append(history_entry)
+
+        # Keep only last 100 conversations
+        if len(self.conversation_history) > 100:
+            self.conversation_history.pop(0)
+
+    def _enhance_query_with_emotion(self, query: str, emotion_analysis: Dict) -> str:
+        """Enhance query with emotional context for better processing"""
+        emotion = emotion_analysis['primary_emotion']
+        intensity = emotion_analysis['intensity']
+
+        # Add emotional context hints to help reasoning
+        if emotion in ['sadness', 'anger', 'fear'] and intensity > 0.6:
+            enhanced = f"[EMOTIONAL_CONTEXT: User seems distressed] {query}"
+        elif emotion in ['joy', 'gratitude'] and intensity > 0.6:
+            enhanced = f"[EMOTIONAL_CONTEXT: User seems positive] {query}"
+        elif emotion == 'confusion' and intensity > 0.5:
+            enhanced = f"[EMOTIONAL_CONTEXT: User seems confused] {query}"
+        else:
+            enhanced = query
+
+        return enhanced
+
+    async def _execute_relevant_tools(self, query: str, reasoning_result: Dict[str, Any], emotion_analysis: Dict = None) -> List[Dict[str, Any]]:
+        """Execute relevant tools with emotional awareness"""
+        # Use the integrated tool system
+        tool_response = self.tool_integrator.process_query(query)
+
+        # Adjust tool response based on emotional context
+        if emotion_analysis and emotion_analysis['primary_emotion'] in ['sadness', 'anger']:
+            # Be more supportive in tool responses
+            tool_response += " I'm here to help you through this."
+
+        return [{'tool': 'integrated_tools', 'result': tool_response, 'response': tool_response}]
+
+    async def _enhance_response_with_capabilities(self, base_response: str,
+                                                reasoning_result: Dict[str, Any],
+                                                tool_results: List[Dict[str, Any]],
+                                                multimodal_results: Dict[str, Any],
+                                                conversation_context: Dict[str, Any],
+                                                emotion_analysis: Dict,
+                                                relationship_insights: List[str]) -> str:
+        """Enhance the base response with all SOFIA capabilities"""
+
+        enhanced_response = base_response
+
+        # Add reasoning insights
+        if reasoning_result.get('selected_strategy'):
+            strategy = reasoning_result['selected_strategy']['name']
+            enhanced_response += f" Utilicé {strategy.replace('_', ' ')} para abordar este problema."
+
+        # Add tool results
+        if tool_results:
+            for tool_result in tool_results:
+                if tool_result.get('response') and tool_result['response'] != base_response:
+                    enhanced_response += f" {tool_result['response']}"
+
+        # Add multimodal insights
+        if multimodal_results:
+            for key, value in multimodal_results.items():
+                enhanced_response += f" Análisis visual: {value}"
+
+        # Add relationship insights occasionally
+        if relationship_insights and len(enhanced_response.split()) < 50:  # Only for shorter responses
+            insight = relationship_insights[0] if relationship_insights else ""
+            if insight and random.random() < 0.3:
+                enhanced_response += f" {insight}"
+
+        # Add emotional validation for high-intensity emotions
+        if emotion_analysis['intensity'] > 0.7:
+            emotion = emotion_analysis['primary_emotion']
+            if emotion in ['sadness', 'anger', 'fear']:
+                enhanced_response += " Sé que esto es difícil, pero estoy aquí para apoyarte."
+            elif emotion in ['joy', 'gratitude']:
+                enhanced_response += " ¡Me hace muy feliz poder ayudarte!"
+
+        return enhanced_response
+
+    def _track_performance(self, query: str, processing_time: float, response: str, emotion_analysis: Dict = None):
+        """Track performance with emotional metrics"""
+        self.performance_metrics[len(self.performance_metrics)] = {
+            'timestamp': datetime.now().isoformat(),
+            'query_length': len(query),
+            'response_length': len(response),
+            'processing_time': processing_time,
+            'emotion': emotion_analysis.get('primary_emotion', 'neutral') if emotion_analysis else 'neutral',
+            'emotional_intensity': emotion_analysis.get('intensity', 0.0) if emotion_analysis else 0.0
+        }
             'query': query,
             'response': response,
             'tools_used': [],  # Would be populated in real implementation
@@ -271,13 +403,15 @@ class SOFIAAssistant:
         if len(self.conversation_history) > self.config['max_conversation_length']:
             self.conversation_history = self.conversation_history[-self.config['max_conversation_length']:]
 
-    def _track_performance(self, query: str, processing_time: float, response: Dict[str, Any]):
-        """Track performance metrics"""
-        self.performance_metrics[datetime.now().isoformat()] = {
+    def _track_performance(self, query: str, processing_time: float, response: str, emotion_analysis: Dict = None):
+        """Track performance with emotional metrics"""
+        self.performance_metrics[len(self.performance_metrics)] = {
+            'timestamp': datetime.now().isoformat(),
             'query_length': len(query),
+            'response_length': len(response),
             'processing_time': processing_time,
-            'response_quality': 'good' if response.get('success') else 'poor',
-            'tools_used': len(response.get('tools_used', []))
+            'emotion': emotion_analysis.get('primary_emotion', 'neutral') if emotion_analysis else 'neutral',
+            'emotional_intensity': emotion_analysis.get('intensity', 0.0) if emotion_analysis else 0.0
         }
 
     async def _update_federated_learning(self, query: str, response: Dict[str, Any]):
