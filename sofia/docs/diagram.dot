@@ -1,0 +1,19 @@
+digraph SOFIA {
+  rankdir=LR;
+  node [shape=box, style=rounded];
+  A[label="prepare_data.py
+pairs.jsonl"];
+  B[label="mine_hard_negatives.py
+pairs_hard.jsonl"];
+  C[label="distill_kd.py
+pairs_kd.jsonl"];
+  D[label="train_sofia.py
+SOFIA/, proj-*"];
+  E[label="eval_compare.py
+eval_out/"];
+  F[label="serve_api.py
+FastAPI /embed"];
+
+  A -> B -> C -> D -> E;
+  D -> F;
+}

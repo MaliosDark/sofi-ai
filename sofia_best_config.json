@@ -1,0 +1,10 @@
+{
+  "embedding_dim": 512,
+  "batch_size": 32,
+  "learning_rate": 2e-05,
+  "epochs": 3,
+  "lora_rank": 32,
+  "triplet_margin": 0.1,
+  "score": 0.743,
+  "timestamp": 1758453053.6274717
+}
