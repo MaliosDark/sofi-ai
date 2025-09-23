@@ -23,22 +23,22 @@ class EmotionalAnalyzer:
         """Load comprehensive emotion lexicon with intensities"""
         return {
             # Positive emotions
-            'joy': {'words': ['happy', 'excited', 'thrilled', 'delighted', 'ecstatic', 'overjoyed', 'blissful', 'cheerful', 'gleeful', 'jubilant'], 'intensity': 0.8, 'valence': 1.0},
+            'joy': {'words': ['happy', 'excited', 'thrilled', 'delighted', 'ecstatic', 'overjoyed', 'blissful', 'cheerful', 'gleeful', 'jubilant', 'feliz', 'contento', 'alegre', 'emocionado', 'entusiasmado', 'radiante'], 'intensity': 0.8, 'valence': 1.0},
             'love': {'words': ['love', 'adore', 'cherish', 'fond', 'affectionate', 'devoted', 'passionate', 'tender'], 'intensity': 0.9, 'valence': 1.0},
-            'gratitude': {'words': ['thankful', 'grateful', 'appreciative', 'indebted', 'obliged'], 'intensity': 0.7, 'valence': 0.8},
+            'gratitude': {'words': ['thankful', 'grateful', 'appreciative', 'indebted', 'obliged', 'agradecido', 'gracias', 'apreciar', 'reconocido'], 'intensity': 0.7, 'valence': 0.8},
             'pride': {'words': ['proud', 'accomplished', 'achieved', 'successful', 'triumphant'], 'intensity': 0.8, 'valence': 0.9},
             'hope': {'words': ['hopeful', 'optimistic', 'confident', 'encouraged', 'positive'], 'intensity': 0.6, 'valence': 0.8},
 
             # Negative emotions
-            'sadness': {'words': ['sad', 'unhappy', 'depressed', 'down', 'blue', 'melancholy', 'sorrowful', 'heartbroken'], 'intensity': 0.8, 'valence': -1.0},
-            'anger': {'words': ['angry', 'furious', 'irritated', 'annoyed', 'frustrated', 'rage', 'outraged', 'hostile'], 'intensity': 0.9, 'valence': -0.9},
-            'fear': {'words': ['afraid', 'scared', 'terrified', 'anxious', 'worried', 'nervous', 'panicked', 'frightened'], 'intensity': 0.8, 'valence': -0.8},
+            'sadness': {'words': ['sad', 'unhappy', 'depressed', 'down', 'blue', 'melancholy', 'sorrowful', 'heartbroken', 'triste', 'infeliz', 'deprimido', 'abatido', 'melancólico'], 'intensity': 0.8, 'valence': -1.0},
+            'anger': {'words': ['angry', 'furious', 'irritated', 'annoyed', 'frustrated', 'rage', 'outraged', 'hostile', 'enojado', 'furioso', 'irritado', 'molesto', 'frustrado'], 'intensity': 0.9, 'valence': -0.9},
+            'fear': {'words': ['afraid', 'scared', 'terrified', 'anxious', 'worried', 'nervous', 'panicked', 'frightened', 'miedo', 'asustado', 'aterrorizado', 'ansioso', 'preocupado', 'pánico'], 'intensity': 0.8, 'valence': -0.8},
             'disgust': {'words': ['disgusted', 'repulsed', 'revolted', 'nauseated', 'appalled', 'offended'], 'intensity': 0.7, 'valence': -0.7},
             'guilt': {'words': ['guilty', 'remorseful', 'ashamed', 'regretful', 'sorry'], 'intensity': 0.7, 'valence': -0.6},
 
             # Neutral/Complex emotions
             'surprise': {'words': ['surprised', 'shocked', 'amazed', 'astonished', 'startled', 'unexpected'], 'intensity': 0.6, 'valence': 0.0},
-            'confusion': {'words': ['confused', 'puzzled', 'bewildered', 'perplexed', 'lost', 'uncertain'], 'intensity': 0.5, 'valence': -0.2},
+            'confusion': {'words': ['confused', 'puzzled', 'bewildered', 'perplexed', 'lost', 'uncertain', 'confundido', 'perplejo', 'desconcertado', 'perdido', 'incierto'], 'intensity': 0.5, 'valence': -0.2},
             'curiosity': {'words': ['curious', 'interested', 'intrigued', 'fascinated', 'inquisitive'], 'intensity': 0.6, 'valence': 0.4},
             'trust': {'words': ['trust', 'confident', 'reliable', 'faithful', 'loyal'], 'intensity': 0.7, 'valence': 0.8},
             'anticipation': {'words': ['excited', 'eager', 'expectant', 'anxious', 'waiting'], 'intensity': 0.5, 'valence': 0.3}
@@ -231,34 +231,50 @@ class EmotionalAnalyzer:
 
         empathy_templates = {
             'highly_positive': [
-                "¡Qué maravilla! Me alegra tanto escuchar eso.",
-                "¡Estoy tan feliz por ti! Eso suena increíble.",
-                "¡Qué noticia tan buena! Me hace sonreír."
+                "That's wonderful! I'm so happy to hear that.",
+                "I'm thrilled for you! That sounds amazing.",
+                "What great news! It makes me smile.",
+                "That's absolutely wonderful! I'm beaming with joy for you.",
+                "What fantastic news! This really brightens my day."
             ],
             'positive': [
-                "Me alegra escuchar eso.",
-                "Eso suena bien, ¿no?",
-                "Qué bonito momento."
+                "I'm glad to hear that.",
+                "That sounds really good.",
+                "What a positive development.",
+                "I'm happy things are going well.",
+                "That puts a smile on my face."
             ],
             'highly_negative': [
-                "Lo siento mucho, eso debe ser realmente difícil.",
-                "Estoy aquí para escucharte, cuéntame más si quieres.",
-                "Entiendo que esto es duro, ¿hay algo que pueda hacer?"
+                "I'm so sorry, that must be really difficult.",
+                "I'm here to listen, tell me more if you want.",
+                "I understand this is tough, is there anything I can do?",
+                "I can hear how tough this is for you.",
+                "That sounds incredibly challenging.",
+                "I'm truly sorry you're going through this."
             ],
             'negative': [
-                "Entiendo que no estás pasando por un buen momento.",
-                "A veces las cosas se ponen difíciles, estoy aquí.",
-                "Siento que te sientas así."
+                "I understand you're not having a good time.",
+                "Sometimes things get hard, I'm here.",
+                "I'm sorry you feel that way.",
+                "I understand this isn't easy.",
+                "That sounds challenging.",
+                "I can sense this is weighing on you."
             ],
             'neutral': [
-                "Entiendo.",
-                "Ajá, continúa.",
-                "Te escucho."
+                "I understand.",
+                "Okay, go on.",
+                "I'm listening.",
+                "I hear you.",
+                "That makes sense.",
+                "I see what you mean."
             ],
             'mixed': [
-                "Parece que hay sentimientos encontrados aquí.",
-                "Entiendo que esto es complejo.",
-                "Hay mucho que procesar en esto."
+                "It seems there are mixed feelings here.",
+                "I understand this is complex.",
+                "There's a lot to process in this.",
+                "It seems there are different feelings here.",
+                "This sounds like a complex situation.",
+                "I can sense mixed emotions about this."
             ]
         }
 
@@ -350,29 +366,29 @@ class EmotionalMemory:
         insights = []
 
         if not profile:
-            return ["Aún estoy conociéndote mejor."]
+            return ["I'm still getting to know you better."]
 
         # Analyze emotional patterns
         emotion_counts = profile['emotion_counts']
         if emotion_counts:
             dominant_emotion = max(emotion_counts, key=emotion_counts.get)
-            insights.append(f"Veo que a menudo te sientes {dominant_emotion}.")
+            insights.append(f"I see that you often feel {dominant_emotion}.")
 
         # Analyze trends
         trends = profile['emotional_trends']
         if len(trends) >= 3:
             recent_emotions = [t['emotion'] for t in trends[-3:]]
             if len(set(recent_emotions)) == 1:
-                insights.append(f"Últimamente has estado sintiéndote {recent_emotions[0]} consistentemente.")
+                insights.append(f"Lately you've been feeling {recent_emotions[0]} consistently.")
             elif recent_emotions[0] != recent_emotions[-1]:
-                insights.append("He notado cambios en tu estado de ánimo últimamente.")
+                insights.append("I've noticed changes in your mood lately.")
 
         # Valence analysis
         avg_valence = profile['average_valence']
         if avg_valence > 0.3:
-            insights.append("Generalmente tienes una perspectiva positiva.")
+            insights.append("You generally have a positive outlook.")
         elif avg_valence < -0.3:
-            insights.append("A veces pareces llevar una carga emocional pesada.")
+            insights.append("Sometimes you seem to carry a heavy emotional load.")
 
         return insights
 

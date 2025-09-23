@@ -1,0 +1,26 @@
+# SOFIA Configuration - Auto-detects best available LLM
+llm_provider: "auto"  # auto, openai, anthropic, groq, local, template
+model_name: Qwen/Qwen2.5-1.5B-Instruct  # Advanced open source model
+temperature: 0.7
+max_tokens: 150
+
+# API Keys (set these if using cloud providers)
+api_keys:
+  openai: ""    # Your OpenAI API key
+  anthropic: "" # Your Anthropic API key
+  groq: ""      # Your Groq API key
+
+# Local model settings
+local_model_path: "/tmp/sofia_model"  # Where to store downloaded models
+local_device: "auto"  # auto, cpu, cuda
+
+# Response generation settings
+enable_emotional_intelligence: true
+enable_context_awareness: true
+enable_learning_modifiers: true
+response_cache_enabled: true
+cache_max_size: 100
+
+# Auto-download settings
+auto_download_models: false  # Automatically download models if none available
+preferred_local_model: "microsoft/DialoGPT-small"  # Small, fast model for local use

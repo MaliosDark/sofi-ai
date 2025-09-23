@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 🎯 SOFIA MASTER SCRIPT
-Ejecuta el pipeline completo: optimización → entrenamiento → evaluación → deployment
+Runs the complete pipeline: optimization → training → evaluation → deployment
 """
 
 import os
@@ -120,8 +120,8 @@ def main():
         print_status("❌ Falló el entrenamiento", Colors.RED)
         return
 
-    # Paso 3: Verificación final
-    print_header("🔍 PASO 3: VERIFICACIÓN FINAL")
+    # Step 3: Final verification
+    print_header("🔍 STEP 3: FINAL VERIFICATION")
     print_status("🧪 Probando modelo final...", Colors.BLUE)
 
     test_cmd = f'''
@@ -129,7 +129,7 @@ def main():
 from sentence_transformers import SentenceTransformer, util
 import time
 
-print('🧪 Verificación final de SOFIA...')
+print('🧪 Final verification of SOFIA...')
 model = SentenceTransformer('./SOFIA')
 test_sentences = ['Hello world', 'How are you?', 'Machine learning is awesome'] * 10
 
@@ -156,7 +156,7 @@ print(f'💾 Memoria: {embeddings.nbytes / 1024 / 1024:.1f} MB')
 "
 '''
 
-    success &= run_command(test_cmd, "Verificación final")
+    success &= run_command(test_cmd, "Final verification")
 
     if success:
         print_header("🎉 ¡SOFIA OPTIMIZADO COMPLETADO!")
@@ -178,7 +178,7 @@ print(f'💾 Memoria: {embeddings.nbytes / 1024 / 1024:.1f} MB')
         print(f"{colors.CYAN}• Benchmark:{colors.RESET} python sofia_auto_optimizer.py")
 
     else:
-        print_status("❌ Verificación falló - revisa el modelo entrenado", Colors.RED)
+        print_status("❌ Verification failed - check the trained model", Colors.RED)
 
 if __name__ == "__main__":
     main()

@@ -19,11 +19,11 @@ import psutil
 import GPUtil
 
 class Colors:
-    """Colores ANSI para output decorado"""
+    """ANSI colors for decorated output"""
     RESET = '\033[0m'
     BOLD = '\033[1m'
 
-    # Colores principales
+    # Main colors
     RED = '\033[31m'
     GREEN = '\033[32m'
     YELLOW = '\033[33m'
@@ -31,7 +31,7 @@ class Colors:
     MAGENTA = '\033[35m'
     CYAN = '\033[36m'
 
-    # Colores brillantes
+    # Bright colors
     BRIGHT_RED = '\033[91m'
     BRIGHT_GREEN = '\033[92m'
     BRIGHT_YELLOW = '\033[93m'

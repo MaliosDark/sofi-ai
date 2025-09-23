@@ -7,32 +7,24 @@ import asyncio
 import json
 import datetime
 import sys
-import yaml
 from typing import Dict, Any, Optional
 
 # SOFIA modules
 from sofia_llm_integration import SOFIALanguageModel
 from sofia_emotional_intelligence import EmotionalAnalyzer, EmotionalMemory
 from sofia_reinforcement_learning import ReinforcementLearner
-from sofia.sofia_growth_system import SOFIAGrowthSystem
 
 class SOFIABrain:
     """Main brain of SOFIA that integrates all components"""
     
     def __init__(self):
         """Initialize SOFIA's brain with all components"""
-        # Load configuration
-        self.config = self._load_config()
-        
         self.emotional_analyzer = EmotionalAnalyzer()
         self.emotional_memory = EmotionalMemory()
         self.reinforcement_learner = ReinforcementLearner()
         
         # Initialize LLM
         self.llm = SOFIALanguageModel()
-        
-        # Initialize growth system
-        self.growth_system = SOFIAGrowthSystem(self.config)
         
         # Initialize conversation context
         self.conversation_history = []
@@ -43,20 +35,6 @@ class SOFIABrain:
             'user_name': None  # Add user name tracking
         }
         self.user_id = "default"
-    
-    def _load_config(self) -> Dict[str, Any]:
-        """Load SOFIA configuration"""
-        try:
-            with open('sofia/config.yaml', 'r') as f:
-                return yaml.safe_load(f)
-        except Exception as e:
-            print(f"⚠️  Could not load config: {e}, using defaults")
-            return {
-                'growth_config': {
-                    'expansion_triggers': {'interaction_threshold': 1000},
-                    'growth_trigger_threshold': 0.85
-                }
-            }
     
     def _calculate_reward(self, user_input: str, response: str, emotional_context: dict) -> float:
         """Calculate reward for reinforcement learning based on response quality"""
@@ -185,25 +163,13 @@ class SOFIABrain:
             except Exception as e:
                 print(f"⚠️  RL learning error: {e}")
             
-            # Record interaction in growth system for autonomous growth
-            try:
-                interaction_quality = min(1.0, max(0.0, reward))  # Convert reward to quality score
-                self.growth_system.record_interaction(interaction_quality)
-            except Exception as e:
-                print(f"⚠️  Growth system error: {e}")
-                import traceback
-                traceback.print_exc()
-            
             # 8. Update emotional memory
             try:
                 self.emotional_memory.update_emotional_profile(self.user_id, emotional_context)
             except Exception as e:
                 print(f"⚠️  Emotional memory error: {e}")
             
-            # 9. Post-process response to avoid repetitive greetings
-            enhanced_response = self._post_process_response(enhanced_response, user_input)
-            
-            # 10. Update conversation history and user profile
+            # 9. Update conversation history and user profile
             self._update_conversation_history(user_input, enhanced_response, emotional_context)
             self._update_user_profile(user_input, emotional_context)
             
@@ -239,13 +205,12 @@ class SOFIABrain:
         # Include user name in prompt if known
         user_name_info = ""
         if self.current_user_profile.get('user_name'):
-            user_name_info = f"The user's name is {self.current_user_profile['user_name']}. "
+            user_name_info = f"You are talking to {self.current_user_profile['user_name']}. "
         
         enhanced_prompt = f"""You are SOFIA, an advanced AI assistant with emotional intelligence. You understand context, emotions, and provide thoughtful, helpful responses.
 
-{conversation_context}Current user message: {user_input}
+{conversation_context}{user_name_info}Current user message: {user_input}
 Detected emotional state: {emotion_description}
-{user_name_info}
 
 Guidelines:
 - Respond naturally and conversationally in English
@@ -256,8 +221,7 @@ Guidelines:
 - Keep responses concise but complete
 - Don't assume emotional situations that aren't clearly stated
 - Focus on being helpful and engaging
-- IMPORTANT: Use the user's name sparingly and naturally - only in greetings during introduction, or when addressing them directly in longer conversations. Do NOT start every response with their name.
-- Remember context from previous messages and respond accordingly
+- Remember the user's name if they introduced themselves, and use it naturally in conversation when appropriate
 
 Response:"""
         
@@ -315,53 +279,6 @@ Response:"""
                 if keyword not in self.current_user_profile['preferred_topics']:
                     self.current_user_profile['preferred_topics'].append(keyword)
 
-    def _post_process_response(self, response: str, user_input: str) -> str:
-        """Post-process response to avoid repetitive greetings and improve natural flow"""
-        
-        # Check if this is not the first interaction
-        if len(self.conversation_history) > 0:
-            # Remove repetitive greetings if user name is known
-            if self.current_user_profile.get('user_name'):
-                user_name = self.current_user_profile['user_name']
-                
-                # Patterns to avoid repeating (including punctuation variations)
-                repetitive_patterns = [
-                    f"Hello {user_name}!",
-                    f"Hi {user_name}!",
-                    f"Hey {user_name}!",
-                    f"Hello {user_name.lower()}!",
-                    f"Hi {user_name.lower()}!",
-                    f"Hey {user_name.lower()}!",
-                    f"Hello, {user_name}!",
-                    f"Hi, {user_name}!",
-                    f"Hey, {user_name}!",
-                    f"Hello, {user_name.lower()}!",
-                    f"Hi, {user_name.lower()}!",
-                    f"Hey, {user_name.lower()}!",
-                    f"Hello {user_name},",
-                    f"Hi {user_name},",
-                    f"Hey {user_name},",
-                    f"Hello {user_name.lower()},",
-                    f"Hi {user_name.lower()},",
-                    f"Hey {user_name.lower()},",
-                ]
-                
-                # Check if response starts with a repetitive greeting
-                response_lower = response.lower().strip()
-                for pattern in repetitive_patterns:
-                    if response_lower.startswith(pattern.lower()):
-                        # Remove the greeting and clean up
-                        response = response[len(pattern):].strip()
-                        # Remove leading punctuation if present
-                        if response.startswith(',') or response.startswith('!') or response.startswith('.'):
-                            response = response[1:].strip()
-                        # Capitalize first letter
-                        if response:
-                            response = response[0].upper() + response[1:]
-                        break
-        
-        return response
-
     def get_stats(self) -> Dict[str, Any]:
         """Get SOFIA brain statistics"""
         
@@ -377,94 +294,58 @@ Response:"""
 
 async def main():
     """Main function for the chat simulator"""
-
+    
     print("🤖 SOFIA Advanced Chat Simulator")
     print("=" * 50)
     print("SOFIA now integrates:")
-    print("  🧠 LLM (Qwen2.5-0.5B)")
+    print("  🧠 LLM (Qwen2.5-1.5B)")
     print("  ❤️  Emotional Intelligence")
     print("  🎯 Reinforcement Learning")
     print("=" * 50)
-
-    # Check if we have piped input
-    import sys
-    import select
-
-    has_piped_input = False
-    piped_message = ""
-
-    # Check if stdin has data available (non-blocking)
-    if select.select([sys.stdin], [], [], 0.0)[0]:
-        try:
-            piped_message = sys.stdin.read().strip()
-            if piped_message:
-                has_piped_input = True
-        except:
-            pass
-
-    if has_piped_input:
-        print("📝 Processing piped input...")
-    else:
-        print("Type 'quit' to exit, 'stats' to see statistics")
-        print()
-
+    print("Type 'quit' to exit, 'stats' to see statistics")
+    print()
+    
     try:
         # Initialize SOFIA's brain
         sofia = SOFIABrain()
-
-        if has_piped_input:
-            print("✅ SOFIA is ready! Processing your message...")
-        else:
-            print("✅ SOFIA is ready! Starting conversation...")
-            print()
-
-        if has_piped_input:
-            # Process the piped message and exit
+        
+        print("✅ SOFIA is ready! Starting conversation...")
+        print()
+        
+        while True:
             try:
+                user_input = input("You: ").strip()
+                
+                if user_input.lower() == 'quit':
+                    print("👋 See you later!")
+                    break
+                elif user_input.lower() == 'stats':
+                    stats = sofia.get_stats()
+                    print("\n📊 SOFIA Statistics:")
+                    print(f"  Conversations: {stats['conversation_count']}")
+                    print(f"  User emotional state: {stats['user_profile']['emotional_state']}")
+                    print(f"  User name: {stats['user_profile'].get('user_name', 'Unknown')}")
+                    print(f"  Preferred topics: {stats['user_profile']['preferred_topics']}")
+                    print(f"  RL learned states: {stats['rl_stats']['total_states_learned']}")
+                    print(f"  Average reward: {stats['rl_stats']['average_reward']:.2f}")
+                    print()
+                    continue
+                elif not user_input:
+                    continue
+                
+                # Process user input through SOFIA's brain
                 print("🧠 SOFIA is thinking...")
-                response = await sofia.process_message(piped_message)
+                response = await sofia.process_message(user_input)
                 print(f"SOFIA: {response}")
                 print()
-                return  # Exit after processing
+                
+            except KeyboardInterrupt:
+                print("\n👋 See you later!")
+                break
             except Exception as e:
                 print(f"⚠️  Error processing message: {e}")
-                return
-        else:
-            # Interactive mode
-            while True:
-                try:
-                    user_input = input("You: ").strip()
-
-                    if user_input.lower() == 'quit':
-                        print("👋 See you later!")
-                        break
-                    elif user_input.lower() == 'stats':
-                        stats = sofia.get_stats()
-                        print("\n📊 SOFIA Statistics:")
-                        print(f"  Conversations: {stats['conversation_count']}")
-                        print(f"  User emotional state: {stats['user_profile']['emotional_state']}")
-                        print(f"  User name: {stats['user_profile'].get('user_name', 'Unknown')}")
-                        print(f"  Preferred topics: {stats['user_profile']['preferred_topics']}")
-                        print(f"  RL learned states: {stats['rl_stats']['total_states_learned']}")
-                        print(f"  Average reward: {stats['rl_stats']['average_reward']:.2f}")
-                        print()
-                        continue
-                    elif not user_input:
-                        continue
-
-                    # Process user input through SOFIA's brain
-                    print("🧠 SOFIA is thinking...")
-                    response = await sofia.process_message(user_input)
-                    print(f"SOFIA: {response}")
-                    print()
-
-                except KeyboardInterrupt:
-                    print("\n👋 See you later!")
-                    break
-                except Exception as e:
-                    print(f"⚠️  Error processing message: {e}")
-                    print("Please try again.")
-
+                print("Please try again.")
+                
     except KeyboardInterrupt:
         print("\n👋 See you later!")
     except Exception as e:
