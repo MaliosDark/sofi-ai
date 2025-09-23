@@ -1,30 +1,113 @@
 name: SOFIA
-base_model: Qwen/Qwen3-Embedding-8B
+base_model: sentence-transformers/all-MiniLM-L6-v2
 output_dir: ./SOFIA
 seed: 42
-epochs: 2
-batch_size: 128
+epochs: 1
+batch_size: 8
 lr: 2.0e-5
-warmup_ratio: 0.06
+warmup_ratio: 0.15
 max_len: 512
 fp16: true
+gradient_clip_norm: 1.0
+weight_decay: 0.01
 lora:
-  r: 16
-  alpha: 32
+  r: 64
+  alpha: 128
   dropout: 0.05
   target_modules: ["q_proj","k_proj","v_proj","o_proj","gate_proj","up_proj","down_proj"]
 kd:
   teachers:
     - BAAI/bge-m3
     - intfloat/e5-mistral-7b-instruct
-  kd_weight: 0.6
+    - sentence-transformers/all-mpnet-base-v2
+    - sentence-transformers/paraphrase-multilingual-mpnet-base-v2
+  kd_weight: 0.85
 losses:
   - cosine
+  - multiple_negatives_ranking
   - triplet
 instruction_templates:
   query: "Query: {text}"
   doc:   "Document: {text}"
-dims_to_export: [1024, 3072, 4096]
+dims_to_export: [768, 1024, 2048, 3072, 4096]
+datasets:
+  stsb: sentence-transformers/stsb
+  nq:   mteb/nq
+  quora: paws
+  paws: paws
+  banking77: banking77
+  emotion_dataset: emotion_dataset
+  dialogue_dataset: dialogue_dataset
+hard_negatives:
+  bm25_k: 150
+  faiss_k: 150
+  per_pos: 5
+  diversity_threshold: 0.9
+evaluation:
+  mteb_tasks: ["STSBenchmark", "NQ", "QuoraRetrieval", "Banking77Classification", "EmotionClassification", "DialogueEvaluation"]
+  custom_metrics: ["emotional_understanding", "context_retention", "response_naturalness", "personalization_score", "memory_accuracy"]
+agi_training:
+  emotional_data_path: null
+  conversation_data_path: null
+  emotional_epochs: 3
+  conversation_epochs: 3
+  emotional_lr: 2e-4
+  enable_emotional_training: true
+  enable_conversation_training: true
+  enable_reinforcement_learning: true
+  multimodal_training: false
+  federated_learning: false
+  personality_adaptation: true
+  continuous_learning: true
+  meta_learning: true
+  emotional_memory: true
+  user_modeling: true
+# 🚀 MODEL GROWTH SYSTEM - Auto-expansión y crecimiento autónomo
+model_growth:
+  enable_growth: true
+  growth_trigger_threshold: 0.85  # Inicia crecimiento cuando accuracy > 85%
+  max_model_size_gb: 2.0  # Límite de crecimiento (2GB)
+  growth_rate: 0.1  # 10% crecimiento por fase
+  auto_expansion:
+    knowledge_expansion: true  # Expande base de conocimiento
+    capability_expansion: true  # Añade nuevas capacidades
+    parameter_expansion: true  # Crece parámetros del modelo
+    dataset_expansion: true  # Genera nuevos datos de entrenamiento
+  autonomous_learning:
+    self_supervised_learning: true  # Aprende sin supervisión
+    online_learning: true  # Aprende de interacciones en tiempo real
+    curriculum_learning: true  # Aprende de fácil a difícil
+    meta_learning: true  # Aprende a aprender mejor
+  self_initiation:
+    auto_startup: true  # Se inicia automáticamente cuando detecta necesidad
+    background_learning: true  # Aprende en background
+    proactive_learning: true  # Busca nuevos conocimientos proactivamente
+    knowledge_synthesis: true  # Sintetiza nuevo conocimiento
+  growth_phases:
+    phase_1: "foundation"  # Base emocional y conversacional
+    phase_2: "expansion"  # Crecimiento de conocimientos
+    phase_3: "specialization"  # Especialización por dominio
+    phase_4: "autonomy"  # Autonomía completa
+    phase_5: "transcendence"  # Superación de límites
+  knowledge_domains:
+    - emotional_intelligence
+    - conversational_ai
+    - knowledge_reasoning
+    - creative_problem_solving
+    - ethical_decision_making
+    - cultural_adaptation
+    - scientific_discovery
+    - artistic_creation
+  growth_metrics:
+    knowledge_volume: 0  # KB de conocimiento acumulado
+    capability_score: 0  # Puntuación de capacidades (0-100)
+    autonomy_level: 0  # Nivel de autonomía (0-100)
+    growth_potential: 0  # Potencial de crecimiento (0-100)
+  expansion_triggers:
+    interaction_threshold: 1000  # Crece cada 1000 interacciones
+    knowledge_gap_detected: true  # Crece cuando detecta brechas de conocimiento
+    performance_plateau: true  # Crece cuando el rendimiento se estanca
+    user_demand: true  # Crece cuando usuarios demandan más capacidades
 datasets:
   stsb: sentence-transformers/stsb
   nq:   mteb/nq
@@ -32,6 +115,21 @@ datasets:
   paws: paws
   banking77: banking77
 hard_negatives:
-  bm25_k: 50
-  faiss_k: 50
-  per_pos: 2
+  bm25_k: 100
+  faiss_k: 100
+  per_pos: 3
+  diversity_threshold: 0.8
+evaluation:
+  mteb_tasks: ["STSBenchmark", "NQ", "QuoraRetrieval", "Banking77Classification"]
+  custom_metrics: ["emotional_understanding", "context_retention", "response_naturalness"]
+agi_training:
+  emotional_data_path: null  # Will generate synthetic data
+  conversation_data_path: null  # Will generate synthetic data
+  emotional_epochs: 2
+  conversation_epochs: 2
+  emotional_lr: 1e-4
+  enable_emotional_training: true
+  enable_conversation_training: true
+  enable_reinforcement_learning: true
+  multimodal_training: false
+  federated_learning: false

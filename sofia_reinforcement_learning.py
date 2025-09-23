@@ -17,6 +17,14 @@ import math
 # Import emotional intelligence components
 from sofia_emotional_intelligence import EmotionalAnalyzer, EmotionalMemory
 
+# Import LLM integration (optional)
+try:
+    from sofia_llm_integration import SOFIALanguageModel
+    LLM_AVAILABLE = True
+except ImportError:
+    LLM_AVAILABLE = False
+    SOFIALanguageModel = None
+
 class ReinforcementLearner:
     """Real-time reinforcement learning system for SOFIA"""
 
@@ -405,10 +413,25 @@ class ReinforcementLearner:
 class SelfImprovingSOFIA:
     """Integration of emotional intelligence and reinforcement learning"""
 
-    def __init__(self):
+    def __init__(self, use_llm: bool = True):
         self.emotional_analyzer = EmotionalAnalyzer()
         self.emotional_memory = EmotionalMemory()
         self.reinforcement_learner = ReinforcementLearner()
+
+        # Initialize LLM if available and requested
+        self.use_llm = use_llm and LLM_AVAILABLE
+        if self.use_llm:
+            try:
+                self.llm = SOFIALanguageModel()
+                print("🧠 LLM integration enabled for enhanced responses")
+            except Exception as e:
+                print(f"⚠️  LLM initialization failed: {e}, falling back to template responses")
+                self.use_llm = False
+                self.llm = None
+        else:
+            self.llm = None
+            if use_llm and not LLM_AVAILABLE:
+                print("⚠️  LLM module not available, install sofia_llm_integration.py or required packages")
 
         # Personality traits that evolve through learning
         self.personality = {
@@ -419,7 +442,7 @@ class SelfImprovingSOFIA:
             'curiosity_level': 0.8
         }
 
-    def process_user_input(self, user_input: str, user_id: str = "default") -> Dict:
+    async def process_user_input(self, user_input: str, user_id: str = "default") -> Dict:
         """
         Process user input with full emotional intelligence and learning
 
@@ -446,13 +469,18 @@ class SelfImprovingSOFIA:
         # Get best action from learning
         best_action = self.reinforcement_learner.get_best_action(state)
 
-        # Generate response using learned patterns
-        response = self._generate_human_like_response(
-            emotion_analysis,
-            best_action,
-            relationship_insights,
-            user_input
-        )
+        # Generate response using LLM or learned patterns
+        if self.use_llm and self.llm:
+            response = await self._generate_llm_response(
+                user_input, emotion_analysis, relationship_insights, user_id
+            )
+        else:
+            response = self._generate_human_like_response(
+                emotion_analysis,
+                best_action,
+                relationship_insights,
+                user_input
+            )
 
         # Calculate reward (simplified - in real implementation, this would come from user feedback)
         reward = self._calculate_reward(emotion_analysis, response)
@@ -517,91 +545,264 @@ class SelfImprovingSOFIA:
 
         return full_response.strip()
 
+    async def _generate_llm_response(self, user_input: str, emotion_analysis: Dict,
+                                   relationship_insights: List[str], user_id: str) -> str:
+        """Generate response using LLM for enhanced natural language generation"""
+
+        if not self.llm:
+            # Fallback to template response if LLM not available
+            return self._generate_human_like_response(emotion_analysis, 'engage', relationship_insights, user_input)
+
+        # Get conversation history for context (simplified - using available methods)
+        conversation_history = []  # TODO: Implement proper conversation history retrieval
+
+        # Create context dictionary
+        context = {
+            'user_id': user_id,
+            'relationship_insights': relationship_insights,
+            'personality': self.personality,
+            'learned_behaviors': self.reinforcement_learner.learning_data.get('learned_behaviors', {})
+        }
+
+        try:
+            # Generate response using LLM
+            llm_response = await self.llm.generate_emotional_response(
+                user_input, emotion_analysis, context, conversation_history
+            )
+
+            # Apply personality modifiers and learned behaviors to LLM response
+            personality_modifier = self._apply_personality_modifiers()
+            learned_modifiers = self._apply_learned_modifiers('llm_generated', emotion_analysis)
+
+            # Add relationship insights if appropriate
+            context_addition = ""
+            if relationship_insights and random.random() < 0.2:  # Lower frequency for LLM responses
+                context_addition = f" {random.choice(relationship_insights)}"
+
+            # Combine LLM response with learned modifiers
+            full_response = f"{llm_response}{context_addition}{personality_modifier}{learned_modifiers}"
+
+            return full_response.strip()
+
+        except Exception as e:
+            print(f"LLM generation failed: {e}, falling back to template response")
+            # Fallback to template response on LLM failure
+            return self._generate_human_like_response(emotion_analysis, 'engage', relationship_insights, user_input)
+
     def _apply_personality_modifiers(self) -> str:
-        """Apply personality-based modifiers to response"""
+        """Apply personality-based modifiers to response with more variety"""
         modifiers = []
 
         if random.random() < self.personality['humor_level']:
-            modifiers.append(" 😊")
+            modifiers.append(random.choice([" 😊", " 😉", " 😄"]))
 
-        if random.random() < self.personality['curiosity_level'] * 0.5:
-            modifiers.append(" ¿Me cuentas más sobre eso?")
+        if random.random() < self.personality['curiosity_level'] * 0.2:  # Further reduced frequency
+            curiosity_phrases = [
+                " I'd love to hear more about that.",
+                " That sounds fascinating.",
+                " I'm curious to know more.",
+                " Tell me your thoughts on that."
+            ]
+            modifiers.append(random.choice(curiosity_phrases))
 
         return "".join(modifiers)
 
     def _apply_learned_modifiers(self, action: str, emotion_analysis: Dict) -> str:
-        """Apply learned behavioral modifiers"""
+        """Apply learned behavioral modifiers with more variety"""
         modifiers = []
         learned = self.reinforcement_learner.learning_data['learned_behaviors']
 
-        if learned.get('clarifying_questions', False) and random.random() < 0.2:
-            modifiers.append(" ¿Qué más me puedes contar al respecto?")
+        if learned.get('clarifying_questions', False) and random.random() < 0.15:  # Reduced frequency
+            clarifying_questions = [
+                " What else comes to mind?",
+                " Can you share more details?",
+                " How did that make you feel?",
+                " What happened next?"
+            ]
+            modifiers.append(random.choice(clarifying_questions))
 
         if learned.get('emotional_validation', False) and emotion_analysis['intensity'] > 0.6:
-            modifiers.append(" Entiendo perfectamente cómo te sientes.")
+            validation_phrases = [
+                " I completely understand how you feel.",
+                " Your feelings are completely valid.",
+                " It's okay to feel this way.",
+                " I can sense how strongly you feel about this."
+            ]
+            modifiers.append(random.choice(validation_phrases))
 
-        if learned.get('conversation_references', False) and random.random() < 0.15:
-            modifiers.append(" Recordando nuestras conversaciones anteriores...")
+        if learned.get('conversation_references', False) and random.random() < 0.1:  # Reduced frequency
+            reference_phrases = [
+                " This reminds me of our earlier conversation.",
+                " Building on what you said before...",
+                " Connecting this to what we discussed...",
+                " Remembering our previous talks..."
+            ]
+            modifiers.append(random.choice(reference_phrases))
 
         return "".join(modifiers)
 
     def _generate_action_response(self, action: str, emotion_analysis: Dict, user_input: str) -> str:
-        """Generate response based on learned action"""
+        """Generate response based on learned action with more context and specificity"""
         emotion = emotion_analysis['primary_emotion']
         intensity = emotion_analysis['intensity']
+        user_words = user_input.lower().split()
+
+        # Extract key topics/words from user input for more specific responses
+        key_topics = self._extract_key_topics(user_input)
 
         action_responses = {
             'celebrate': [
-                "¡Eso es fantástico! Me hace muy feliz escucharlo.",
-                "¡Qué maravillosa noticia! Celebremos este momento.",
-                "¡Estoy tan contenta por ti! Esto merece una celebración."
+                f"That's fantastic about {key_topics[0] if key_topics else 'that'}! It really warms my heart to hear it. You must be feeling great.",
+                f"What wonderful news about {key_topics[0] if key_topics else 'your progress'}! This calls for a celebration. Tell me more about how it happened.",
+                f"I'm genuinely thrilled for you with {key_topics[0] if key_topics else 'this achievement'}! You deserve all the happiness in the world.",
+                f"That's absolutely amazing! I'm so happy things are going well with {key_topics[0] if key_topics else 'everything'}.",
+                f"Wow, that's fantastic news! I can feel your excitement about {key_topics[0] if key_topics else 'this'} from here."
             ],
             'empathize': [
-                "Entiendo que esto es difícil. Estoy aquí para apoyarte.",
-                "Siento que estés pasando por esto. ¿Quieres hablar más al respecto?",
-                "Comprendo lo duro que debe ser. Mi apoyo está contigo."
+                f"I can sense how challenging {key_topics[0] if key_topics else 'this situation'} must be for you. I'm here whenever you need to talk.",
+                f"I'm truly sorry you're dealing with {key_topics[0] if key_topics else 'this difficulty'}. It sounds really tough right now.",
+                f"I understand how tough {key_topics[0] if key_topics else 'this'} can be. You don't have to go through it alone.",
+                f"That sounds really difficult with {key_topics[0] if key_topics else 'everything that is happening'}. My thoughts are with you.",
+                f"I can hear how much {key_topics[0] if key_topics else 'this'} is affecting you. Take all the time you need."
             ],
             'calm': [
-                "Entiendo tu frustración. Vamos a respirar profundo y ver cómo resolver esto.",
-                "Sé que esto es molesto. ¿Qué podemos hacer para mejorar la situación?",
-                "Tu enojo es válido. Hablemos de cómo podemos solucionarlo."
+                f"I hear your frustration with {key_topics[0] if key_topics else 'this situation'}. Let's take a deep breath together and see what we can do.",
+                f"That sounds really annoying about {key_topics[0] if key_topics else 'what happened'}. I understand why you'd feel this way.",
+                f"Your feelings about {key_topics[0] if key_topics else 'this'} are completely valid. Sometimes these things just build up.",
+                f"I get why {key_topics[0] if key_topics else 'this'} would be frustrating. Let's think about what might help.",
+                f"That does sound irritating with {key_topics[0] if key_topics else 'the situation'}. You have every right to feel upset about it."
             ],
             'reassure': [
-                "Todo va a estar bien. Estoy aquí para ayudarte en lo que necesites.",
-                "No estás solo en esto. Vamos a enfrentar esto juntos.",
-                "Confía en que podemos resolver esto. ¿Qué te preocupa más?"
+                f"Everything will work out with {key_topics[0] if key_topics else 'this'}. You've got this, and I'm here to help.",
+                f"You're not alone in dealing with {key_topics[0] if key_topics else 'this challenge'}. We'll figure it out together.",
+                f"I believe we can overcome {key_topics[0] if key_topics else 'this obstacle'}. You've shown strength before.",
+                f"Things have a way of working out, especially with {key_topics[0] if key_topics else 'situations like this'}. Stay positive.",
+                f"You've handled difficult things before with {key_topics[0] if key_topics else 'challenges'}. This is no different."
             ],
             'acknowledge': [
-                "¡Vaya! Eso es inesperado. Cuéntame más.",
-                "Interesante... no me lo esperaba. ¿Cómo te hace sentir eso?",
-                "¡Qué sorpresa! Me tienes intrigado."
+                f"Wow, {key_topics[0] if key_topics else 'that'} is really surprising! I wasn't expecting to hear that.",
+                f"That's quite unexpected about {key_topics[0] if key_topics else 'the situation'}. How did that come about?",
+                f"I'm genuinely intrigued by {key_topics[0] if key_topics else 'what you just said'}. That's not something I hear every day.",
+                f"That's really interesting about {key_topics[0] if key_topics else 'your experience'}. I can see why you'd mention it.",
+                f"Wow, I didn't see {key_topics[0] if key_topics else 'that'} coming! That's quite something."
             ],
             'engage': [
-                "Me interesa mucho lo que dices. ¿Puedes desarrollarlo?",
-                "Eso suena importante. ¿Qué más piensas al respecto?",
-                "Háblame más sobre eso, quiero entender mejor."
+                f"I'm really interested in your thoughts about {key_topics[0] if key_topics else 'this'}. You always have such unique perspectives.",
+                f"That sounds significant regarding {key_topics[0] if key_topics else 'your experience'}. I'd love to hear your take on it.",
+                f"Your perspective on {key_topics[0] if key_topics else 'this topic'} is always so thoughtful. What made you think about it?",
+                f"That's really fascinating about {key_topics[0] if key_topics else 'what you mentioned'}. I always learn something new from you.",
+                f"I appreciate you sharing about {key_topics[0] if key_topics else 'this'}. It gives me a lot to think about."
             ]
         }
 
         responses = action_responses.get(action, action_responses['engage'])
         return random.choice(responses)
 
+    def _extract_key_topics(self, user_input: str) -> List[str]:
+        """Extract key topics and meaningful words from user input for contextual responses"""
+        # Filter out negative/insulting words that shouldn't be referenced
+        negative_words = {
+            'stupid', 'dumb', 'idiot', 'fuck', 'shit', 'damn', 'asshole', 'bitch',
+            'kill', 'die', 'death', 'suicide', 'hate', 'suck', 'crap', 'bullshit',
+            'fuck you', 'fuk', 'fucking', 'bitch', 'asshole', 'bastard', 'shithead'
+        }
+
+        # Skip common words and Spanish articles/pronouns
+        skip_words = {
+            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+            'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them',
+            'this', 'that', 'these', 'those', 'what', 'when', 'where', 'why', 'how', 'who',
+            'is', 'am', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had',
+            'do', 'does', 'did', 'will', 'would', 'could', 'should', 'can', 'may', 'might',
+            'el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'y', 'o', 'pero', 'en',
+            'que', 'qué', 'como', 'cuando', 'donde', 'porque', 'como', 'yo', 'tu', 'usted',
+            'nosotros', 'ellos', 'esto', 'eso', 'esta', 'esa', 'estos', 'esos', 'estas', 'esas',
+            'hola', 'gracias', 'por', 'favor', 'si', 'no', 'muy', 'mucho', 'poco', 'todo',
+            'nada', 'algo', 'alguien', 'nadie', 'siempre', 'nunca', 'ahora', 'después', 'antes',
+            'hoy', 'ayer', 'mañana', 'bueno', 'malo', 'grande', 'pequeño', 'alto', 'bajo',
+            'soy', 'eres', 'es', 'somos', 'son', 'estoy', 'estas', 'esta', 'estamos', 'estan',
+            'fui', 'fuiste', 'fue', 'fuimos', 'fueron', 'ser', 'estar', 'tener', 'hacer',
+            'decir', 'ir', 'ver', 'dar', 'saber', 'querer', 'llegar', 'pasar', 'deber', 'poner',
+            'parecer', 'quedar', 'creer', 'hablar', 'llevar', 'dejar', 'seguir', 'encontrar',
+            'llamar', 'venir', 'pensar', 'salir', 'volver', 'tomar', 'conocer', 'vivir', 'sentir',
+            'tratar', 'mirar', 'contar', 'empezar', 'esperar', 'buscar', 'existir', 'entrar',
+            'trabajar', 'escribir', 'perder', 'producir', 'ocurrir', 'entender', 'pedir', 'recibir',
+            'recordar', 'terminar', 'permitir', 'aparecer', 'conseguir', 'comenzar', 'servir',
+            'sacar', 'necesitar', 'mantener', 'resultar', 'leer', 'caer', 'cambiar', 'presentar',
+            'crear', 'abrir', 'considerar', 'oír', 'acabar', 'convertir', 'ganar', 'formar',
+            'traer', 'partir', 'morir', 'aceptar', 'realizar', 'suponer', 'comprender', 'lograr',
+            'explicar', 'preguntar', 'tocar', 'reconocer', 'estudiar', 'alcanzar', 'nacer', 'dirigir',
+            'correr', 'utilizar', 'pagar', 'ayudar', 'gustar', 'jugar', 'escuchar', 'cumplir',
+            'sofia', 'escucharme', 'tengo', 'está', 'aprecio', '¡todo', '¡qué', '¿qué', 'hello', 'he;llo'
+        }
+
+        # Common meaningful topic categories (English + Spanish)
+        topic_keywords = {
+            'work': ['work', 'job', 'project', 'task', 'deadline', 'meeting', 'office', 'career', 'business', 'trabajo', 'empleo', 'proyecto', 'tarea', 'plazo', 'reunión', 'oficina', 'carrera', 'negocio'],
+            'health': ['sick', 'ill', 'health', 'doctor', 'pain', 'tired', 'sleep', 'medicine', 'hospital', 'enfermo', 'salud', 'doctor', 'dolor', 'cansado', 'sueño', 'medicina', 'hospital'],
+            'relationships': ['friend', 'family', 'partner', 'love', 'relationship', 'alone', 'lonely', 'together', 'amigo', 'familia', 'pareja', 'amor', 'relación', 'solo', 'solitario', 'juntos'],
+            'emotions': ['happy', 'sad', 'angry', 'frustrated', 'worried', 'anxious', 'excited', 'scared', 'confused', 'feliz', 'triste', 'enojado', 'frustrado', 'preocupado', 'ansioso', 'emocionado', 'asustado', 'confundido'],
+            'future': ['future', 'tomorrow', 'next', 'plan', 'goal', 'dream', 'hope', 'worry', 'planning', 'futuro', 'mañana', 'próximo', 'plan', 'meta', 'sueño', 'esperanza', 'preocupación', 'planificación'],
+            'past': ['yesterday', 'before', 'memory', 'remember', 'used', 'previously', 'ago', 'ayer', 'antes', 'memoria', 'recordar', 'usado', 'previamente', 'hace'],
+            'problems': ['problem', 'issue', 'trouble', 'difficult', 'hard', 'challenge', 'stuck', 'help', 'problema', 'asunto', 'problema', 'difícil', 'duro', 'desafío', 'atascado', 'ayuda'],
+            'success': ['success', 'achievement', 'accomplished', 'proud', 'won', 'finished', 'completed', 'great', 'éxito', 'logro', 'conseguido', 'orgulloso', 'ganado', 'terminado', 'completado', 'genial'],
+            'learning': ['learn', 'study', 'school', 'class', 'teacher', 'book', 'knowledge', 'understand', 'aprender', 'estudiar', 'escuela', 'clase', 'profesor', 'libro', 'conocimiento', 'entender'],
+            'technology': ['computer', 'phone', 'internet', 'software', 'app', 'code', 'programming', 'computadora', 'teléfono', 'internet', 'software', 'aplicación', 'código', 'programación']
+        }
+
+        words = [w.lower().strip('.,!?') for w in user_input.split()]
+        found_topics = []
+
+        # Check for negative words first - if found, don't extract specific topics
+        has_negative = any(word in negative_words for word in words)
+        if has_negative:
+            return ['this situation']  # Generic fallback for negative inputs
+
+        # Look for meaningful topic matches
+        for category, keywords in topic_keywords.items():
+            for word in words:
+                if word in keywords:
+                    found_topics.append(word)
+                    if len(found_topics) >= 2:  # Limit to 2 topics
+                        break
+            if len(found_topics) >= 2:
+                break
+
+        # If no specific topics found, look for nouns that aren't in skip list
+        if not found_topics:
+            for word in words:
+                # Skip short words, numbers, and words in skip list
+                if (len(word) > 3 and
+                    word not in skip_words and
+                    not word.isdigit() and
+                    not any(char.isdigit() for char in word) and
+                    word not in negative_words):
+                    found_topics.append(word)
+                    if len(found_topics) >= 1:
+                        break
+
+        # Final fallback - use generic terms instead of random words
+        if not found_topics:
+            found_topics = ['what you mentioned', 'your experience', 'this topic']
+
+        return found_topics[:2]
+
     def _calculate_reward(self, emotion_analysis: Dict, response: str) -> float:
         """Calculate reward for the interaction (simplified version)"""
         base_reward = 0.5
 
         # Reward based on emotional appropriateness
-        if emotion_analysis['primary_emotion'] in ['joy', 'gratitude'] and 'feliz' in response.lower():
+        if emotion_analysis['primary_emotion'] in ['joy', 'gratitude'] and 'happy' in response.lower():
             base_reward += 0.3
-        elif emotion_analysis['primary_emotion'] in ['sadness', 'anger'] and 'entiendo' in response.lower():
+        elif emotion_analysis['primary_emotion'] in ['sadness', 'anger'] and 'understand' in response.lower():
             base_reward += 0.3
 
         # Reward for engagement
-        if any(word in response.lower() for word in ['cuéntame', 'háblame', '¿qué', '¿cómo']):
+        if any(word in response.lower() for word in ['tell me', 'what', 'how']):
             base_reward += 0.2
 
         # Reward for empathy
-        if any(word in response.lower() for word in ['apoyo', 'ayudar', 'contigo']):
+        if any(word in response.lower() for word in ['support', 'help', 'with you']):
             base_reward += 0.2
 
         return min(1.0, base_reward)

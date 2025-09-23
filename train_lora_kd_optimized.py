@@ -30,7 +30,7 @@ def collate_fn(batch):
 
 def main():
     # Configuración optimizada
-    student_model = "./SOFIA"  # Usar modelo local de SOFIA
+    student_model = "./SOFIA"  # Use local SOFIA model
     teacher_model = "sentence-transformers/all-mpnet-base-v2"  # Modelo más pequeño y confiable
     data_path = "data/pairs.jsonl"  # Tus datos existentes
     output_dir = "./SOFIA-v2-lora"

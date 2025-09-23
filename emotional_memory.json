@@ -1,0 +1,796 @@
+{
+  "user_emotional_profile": {
+    "test_user": {
+      "emotion_counts": {
+        "neutral": 38,
+        "fear": 28,
+        "joy": 14,
+        "gratitude": 11
+      },
+      "average_valence": 0.004395604395604387,
+      "average_intensity": 0.5202197802197803,
+      "interaction_count": 91,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "joy",
+          "intensity": 0.96,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:59:41.535476"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:59:41.549809"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.563936"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.578566"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:17.896897"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T17:23:17.913178"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 0.96,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T17:23:17.929167"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T17:23:17.944764"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:17.960402"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:17.975853"
+        }
+      ]
+    },
+    "user_optimista": {
+      "emotion_counts": {
+        "neutral": 25,
+        "joy": 11
+      },
+      "average_valence": 0.3055555555555556,
+      "average_intensity": 0.3138888888888889,
+      "interaction_count": 36,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:25:10.110899"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:26:57.007356"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 0.8,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:26:57.015374"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:26:57.023225"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:52.900076"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 0.8,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:27:52.914379"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:52.928299"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:31:10.056799"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 0.8,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:31:10.065830"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:31:10.074913"
+        }
+      ]
+    },
+    "user_preocupado": {
+      "emotion_counts": {
+        "neutral": 14,
+        "fear": 22
+      },
+      "average_valence": -0.48888888888888915,
+      "average_intensity": 0.08777777777777777,
+      "interaction_count": 36,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:25:10.132164"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:26:57.031177"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:26:57.039377"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:26:57.047389"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:27:52.942663"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:27:52.956902"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:52.966118"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:31:10.083965"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:31:10.092963"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:31:10.102037"
+        }
+      ]
+    },
+    "user_agradecido": {
+      "emotion_counts": {
+        "neutral": 14,
+        "gratitude": 22
+      },
+      "average_valence": 0.48888888888888915,
+      "average_intensity": 0.4666666666666664,
+      "interaction_count": 36,
+      "last_emotion": "gratitude",
+      "emotional_trends": [
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:25:10.154929"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:26:57.056301"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:26:57.064377"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:26:57.072832"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:27:52.975492"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:52.984355"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:27:52.993525"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:31:10.111246"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:31:10.120596"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:31:10.130723"
+        }
+      ]
+    },
+    "vladimir": {
+      "emotion_counts": {
+        "neutral": 4
+      },
+      "average_valence": 0.0,
+      "average_intensity": 0.1,
+      "interaction_count": 4,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:40:57.480884"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:41:05.764862"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:41:12.973111"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:41:21.493856"
+        }
+      ]
+    },
+    "bob": {
+      "emotion_counts": {
+        "neutral": 12,
+        "sadness": 2,
+        "love": 1
+      },
+      "average_valence": -0.06666666666666667,
+      "average_intensity": 0.2466666666666667,
+      "interaction_count": 15,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:46:53.308621"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:25:19.647801"
+        },
+        {
+          "emotion": "sadness",
+          "intensity": 0.8,
+          "valence": -1.0,
+          "timestamp": "2025-09-21T16:25:26.711223"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:25:39.354279"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:04.528077"
+        },
+        {
+          "emotion": "sadness",
+          "intensity": 0.8,
+          "valence": -1.0,
+          "timestamp": "2025-09-21T16:27:11.772911"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:27:18.754361"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:28:02.954859"
+        },
+        {
+          "emotion": "love",
+          "intensity": 0.9,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:28:08.041473"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:28:13.258980"
+        }
+      ]
+    },
+    "bobo": {
+      "emotion_counts": {
+        "neutral": 5
+      },
+      "average_valence": 0.0,
+      "average_intensity": 0.1,
+      "interaction_count": 5,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:49:48.245734"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:49:53.053011"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:50:00.911372"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:50:08.411281"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T15:50:18.849643"
+        }
+      ]
+    },
+    "self_test_user": {
+      "emotion_counts": {
+        "joy": 16,
+        "neutral": 64,
+        "pride": 4,
+        "sadness": 4,
+        "anger": 4,
+        "gratitude": 4,
+        "guilt": 4,
+        "confusion": 4,
+        "hope": 4
+      },
+      "average_valence": 0.14074074074074075,
+      "average_intensity": 0.2870370370370373,
+      "interaction_count": 108,
+      "last_emotion": "hope",
+      "emotional_trends": [
+        {
+          "emotion": "guilt",
+          "intensity": 0.7,
+          "valence": -0.6,
+          "timestamp": "2025-09-21T17:23:18.382238"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 1.0,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T17:23:18.397025"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.411881"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.429589"
+        },
+        {
+          "emotion": "confusion",
+          "intensity": -0.4,
+          "valence": -0.2,
+          "timestamp": "2025-09-21T17:23:18.446091"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.463531"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.479100"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.494521"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.510568"
+        },
+        {
+          "emotion": "hope",
+          "intensity": 0.6,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T17:23:18.526019"
+        }
+      ]
+    },
+    "user_optimistic": {
+      "emotion_counts": {
+        "neutral": 6,
+        "joy": 3
+      },
+      "average_valence": 0.3333333333333333,
+      "average_intensity": 0.4000000000000001,
+      "interaction_count": 9,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:38:19.378773"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 1.0,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:38:19.390137"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:38:19.401286"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.594162"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 1.0,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T16:59:41.607152"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.620147"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:17.992148"
+        },
+        {
+          "emotion": "joy",
+          "intensity": 1.0,
+          "valence": 1.0,
+          "timestamp": "2025-09-21T17:23:18.006332"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.020489"
+        }
+      ]
+    },
+    "user_worried": {
+      "emotion_counts": {
+        "fear": 6,
+        "neutral": 3
+      },
+      "average_valence": -0.5333333333333333,
+      "average_intensity": 0.08666666666666663,
+      "interaction_count": 9,
+      "last_emotion": "neutral",
+      "emotional_trends": [
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:38:19.412534"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:38:19.423984"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:38:19.435488"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:59:41.633241"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T16:59:41.646278"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.659274"
+        },
+        {
+          "emotion": "fear",
+          "intensity": 0.8,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T17:23:18.034627"
+        },
+        {
+          "emotion": "fear",
+          "intensity": -0.6400000000000001,
+          "valence": -0.8,
+          "timestamp": "2025-09-21T17:23:18.048791"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.063312"
+        }
+      ]
+    },
+    "user_grateful": {
+      "emotion_counts": {
+        "neutral": 6,
+        "gratitude": 3
+      },
+      "average_valence": 0.2666666666666667,
+      "average_intensity": 0.4000000000000001,
+      "interaction_count": 9,
+      "last_emotion": "gratitude",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:38:19.447058"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:38:19.458467"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 1.0,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:38:19.470381"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.672640"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T16:59:41.686037"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 1.0,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T16:59:41.699433"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.077861"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-21T17:23:18.093473"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 1.0,
+          "valence": 0.8,
+          "timestamp": "2025-09-21T17:23:18.108141"
+        }
+      ]
+    },
+    "default": {
+      "emotion_counts": {
+        "neutral": 77,
+        "sadness": 1,
+        "gratitude": 1
+      },
+      "average_valence": -0.0025316455696202497,
+      "average_intensity": 0.09822784810126567,
+      "interaction_count": 79,
+      "last_emotion": "gratitude",
+      "emotional_trends": [
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-22T19:36:19.685512"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:20:27.832326"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:22:02.952874"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:22:37.387595"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:39:33.635791"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:41:31.155356"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:42:10.233332"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:43:17.160117"
+        },
+        {
+          "emotion": "neutral",
+          "intensity": 0.1,
+          "valence": 0.0,
+          "timestamp": "2025-09-23T04:44:34.703983"
+        },
+        {
+          "emotion": "gratitude",
+          "intensity": 0.7,
+          "valence": 0.8,
+          "timestamp": "2025-09-23T04:45:16.864343"
+        }
+      ]
+    }
+  },
+  "conversation_history": [],
+  "emotional_patterns": {},
+  "relationship_context": {}
+}
